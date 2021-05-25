@@ -40,8 +40,10 @@ router.get('/user',verifyToken, safe(actions.getUser));
 
 /* FAVORITOS (Todos (Planets-Persons)) */
 router.get('/user/favoritos',verifyToken, safe(actions.getFavoritos));
-
+/* POST */
 router.post('/user/favoritos/planet/:id',verifyToken, safe(actions.addPostPlanetFav));
 router.post('/user/favoritos/person/:id',verifyToken, safe(actions.addPostPersonFav));
+router.delete('/user/favoritos/planet/:id',verifyToken, safe(actions.deletePostPlanetFav));
+router.delete('/user/favoritos/person/:id',verifyToken, safe(actions.deletePostPersonFav));
 
 export default router;

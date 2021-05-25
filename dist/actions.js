@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.addPostPersonFav = exports.addPostPlanetFav = exports.getFavoritos = exports.login = exports.getPlanet = exports.getPlanets = exports.postPlanet = exports.getPostPerson = exports.getPostPersons = exports.postPerson = exports.getUser = exports.createUser = void 0;
+exports.deletePostPersonFav = exports.deletePostPlanetFav = exports.addPostPersonFav = exports.addPostPlanetFav = exports.getFavoritos = exports.login = exports.getPlanet = exports.getPlanets = exports.postPlanet = exports.getPostPerson = exports.getPostPersons = exports.postPerson = exports.getUser = exports.createUser = void 0;
 var typeorm_1 = require("typeorm"); // getRepository"  traer una tabla de la base de datos asociada al objeto
 var Users_1 = require("./entities/Users");
 var utils_1 = require("./utils");
@@ -265,11 +265,11 @@ var getFavoritos = function (req, res) { return __awaiter(void 0, void 0, void 0
     var favoritosPlanets, favoritosPersons;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, typeorm_1.getRepository(FavsPlanets_1.FavsPlanets).findOne({ where: { users: req.user.user.id },
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(FavsPlanets_1.FavsPlanets).find({ where: { users: req.user.user.id },
                     relations: ['postplanets'] })];
             case 1:
                 favoritosPlanets = _a.sent();
-                return [4 /*yield*/, typeorm_1.getRepository(FavPerson_1.FavsPersons).findOne({ where: { users: req.user.user.id },
+                return [4 /*yield*/, typeorm_1.getRepository(FavPerson_1.FavsPersons).find({ where: { users: req.user.user.id },
                         relations: ['postpersons'] })];
             case 2:
                 favoritosPersons = _a.sent();
@@ -282,16 +282,18 @@ var getFavoritos = function (req, res) { return __awaiter(void 0, void 0, void 0
 }); };
 exports.getFavoritos = getFavoritos;
 var addPostPlanetFav = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var planet, newFavorito, results;
+    var userID, planet, newFavorito, results;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, typeorm_1.getRepository(PostPlanets_1.PostPlanets).findOne(req.params.id)];
+            case 0:
+                userID = req.user.id;
+                return [4 /*yield*/, typeorm_1.getRepository(PostPlanets_1.PostPlanets).findOne(req.params.id)];
             case 1:
                 planet = _a.sent();
                 if (!planet)
                     throw new utils_1.Exception("El planeta que selecciono no existe, cambie su id");
                 newFavorito = new FavsPlanets_1.FavsPlanets();
-                newFavorito.users = req.user.user.id;
+                newFavorito.users = userID;
                 newFavorito.postplanets = planet;
                 return [4 /*yield*/, typeorm_1.getRepository(FavsPlanets_1.FavsPlanets).save(newFavorito)];
             case 2:
@@ -302,16 +304,18 @@ var addPostPlanetFav = function (req, res) { return __awaiter(void 0, void 0, vo
 }); };
 exports.addPostPlanetFav = addPostPlanetFav;
 var addPostPersonFav = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var person, newFavorito, results;
+    var userID, person, newFavorito, results;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, typeorm_1.getRepository(PostPersons_1.PostPersons).findOne(req.params.id)];
+            case 0:
+                userID = req.user.id;
+                return [4 /*yield*/, typeorm_1.getRepository(PostPersons_1.PostPersons).findOne(req.params.id)];
             case 1:
                 person = _a.sent();
                 if (!person)
                     throw new utils_1.Exception("El planeta que selecciono no existe, cambie su id");
                 newFavorito = new FavPerson_1.FavsPersons();
-                newFavorito.users = req.user.user.id;
+                newFavorito.users = userID;
                 newFavorito.postpersons = person;
                 return [4 /*yield*/, typeorm_1.getRepository(FavPerson_1.FavsPersons).save(newFavorito)];
             case 2:
@@ -321,3 +325,51 @@ var addPostPersonFav = function (req, res) { return __awaiter(void 0, void 0, vo
     });
 }); };
 exports.addPostPersonFav = addPostPersonFav;
+var deletePostPlanetFav = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var favoritoPlanet, result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(FavsPlanets_1.FavsPlanets).findOne({
+                    relations: ['postplanets'],
+                    where: {
+                        users: req.user.user.id,
+                        postplanets: req.params.id
+                    }
+                })];
+            case 1:
+                favoritoPlanet = _a.sent();
+                console.log(favoritoPlanet);
+                if (!!favoritoPlanet) return [3 /*break*/, 2];
+                return [2 /*return*/, res.json({ "messager": "El favorito que desea borrar no esta" })];
+            case 2: return [4 /*yield*/, typeorm_1.getRepository(FavsPlanets_1.FavsPlanets)["delete"](favoritoPlanet)];
+            case 3:
+                result = _a.sent();
+                return [2 /*return*/, res.json(result)];
+        }
+    });
+}); };
+exports.deletePostPlanetFav = deletePostPlanetFav;
+var deletePostPersonFav = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var favoritoPerson, result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(FavPerson_1.FavsPersons).findOne({
+                    relations: ['postpersons'],
+                    where: {
+                        users: req.user.user.id,
+                        postpersons: req.params.id
+                    }
+                })];
+            case 1:
+                favoritoPerson = _a.sent();
+                console.log(favoritoPerson);
+                if (!!favoritoPerson) return [3 /*break*/, 2];
+                return [2 /*return*/, res.json({ "messager": "El favorito que desea borrar no esta" })];
+            case 2: return [4 /*yield*/, typeorm_1.getRepository(FavPerson_1.FavsPersons)["delete"](favoritoPerson)];
+            case 3:
+                result = _a.sent();
+                return [2 /*return*/, res.json(result)];
+        }
+    });
+}); };
+exports.deletePostPersonFav = deletePostPersonFav;

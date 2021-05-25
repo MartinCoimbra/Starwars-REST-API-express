@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { getRepository } from 'typeorm'  // getRepository"  traer una tabla de la base de datos asociada al objeto
+import { getRepository, ObjectLiteral } from 'typeorm'  // getRepository"  traer una tabla de la base de datos asociada al objeto
 import { Users } from './entities/Users'
 import { Exception } from './utils'
 import { PostPersons } from './entities/PostPersons'
@@ -138,9 +138,10 @@ export const login = async (req: Request, res: Response): Promise<Response> =>{
 
 export const getFavoritos = async (req: any, res: Response): Promise<Response> =>{
     /* req.user.user.id usuario logeado */
-    const favoritosPlanets = await getRepository(FavsPlanets).findOne({where:{users: req.user.user.id}, 
+ 
+    const favoritosPlanets = await getRepository(FavsPlanets).find({where:{users: req.user.user.id}, 
         relations: ['postplanets']});
-    const favoritosPersons = await getRepository(FavsPersons).findOne({where:{users: req.user.user.id}, 
+    const favoritosPersons = await getRepository(FavsPersons).find({where:{users: req.user.user.id}, 
         relations: ['postpersons']});
     return res.json({
         favoritosPersons,
@@ -150,12 +151,14 @@ export const getFavoritos = async (req: any, res: Response): Promise<Response> =
 
 export const addPostPlanetFav = async (req: any, res: Response): Promise<Response> =>{
     /* Verificamos si el planeta existe */
+    const userID = (req.user as ObjectLiteral).id;
+
     const planet = await getRepository(PostPlanets).findOne(req.params.id);
     if(!planet) throw new Exception("El planeta que selecciono no existe, cambie su id")
 
     /* Le asignamos los valores a los FK */
     let newFavorito = new FavsPlanets();
-    newFavorito.users = req.user.user.id;
+    newFavorito.users = userID;
     newFavorito.postplanets = planet;
 
     //Grabo el fav
@@ -164,15 +167,56 @@ export const addPostPlanetFav = async (req: any, res: Response): Promise<Respons
 } 
 export const addPostPersonFav = async (req: any, res: Response): Promise<Response> =>{
     /* Verificamos si el planeta existe */
+    const userID = (req.user as ObjectLiteral).id;
+
     const person = await getRepository(PostPersons).findOne(req.params.id);
     if(!person) throw new Exception("El planeta que selecciono no existe, cambie su id")
 
     /* Le asignamos los valores a los FK */
     let newFavorito = new FavsPersons();
-    newFavorito.users = req.user.user.id;
+    newFavorito.users = userID;
     newFavorito.postpersons = person;
 
     //Grabo el fav
     const results = await getRepository(FavsPersons).save(newFavorito); 
     return res.json(results);
+} 
+
+export const deletePostPlanetFav = async (req: any, res: Response): Promise<Response> =>{
+    /* const userID = (req.user as ObjectLiteral).id; */
+    const favoritoPlanet = await getRepository(FavsPlanets).findOne(
+         {
+            relations: ['postplanets'],
+            where:{
+                users: req.user.user.id,
+                postplanets: req.params.id 
+            }
+         });
+
+        console.log(favoritoPlanet)
+        if(!favoritoPlanet){
+            return res.json({"messager":"El favorito que desea borrar no esta"})
+        }else{
+            const result = await getRepository(FavsPlanets).delete(favoritoPlanet);
+            return res.json(result);
+        }
+} 
+export const deletePostPersonFav = async (req: any, res: Response): Promise<Response> =>{
+  
+    const favoritoPerson = await getRepository(FavsPersons).findOne(
+         {
+            relations: ['postpersons'],
+            where:{
+                users: req.user.user.id,
+                postpersons: req.params.id 
+            }
+         });
+
+        console.log(favoritoPerson)
+        if(!favoritoPerson){
+            return res.json({"messager":"El favorito que desea borrar no esta"})
+        }else{
+            const result = await getRepository(FavsPersons).delete(favoritoPerson);
+            return res.json(result);
+        }
 } 
