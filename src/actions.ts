@@ -28,10 +28,11 @@ export const createUser = async (req: Request, res:Response): Promise<Response> 
 	return res.json(results);
 }
 
-/* GET todos los usuarios */
-export const getUsers = async (req: Request, res: Response): Promise<Response> =>{
-    const users = await getRepository(Users).find();
-    return res.json(users);
+/* Quiero imprimir al usuario actual en la funcion de abajo  */
+/* GET el usuario actual */
+export const getUser = async (req: Request, res: Response): Promise<Response> =>{
+    const user = await getRepository(Users).findOne(req.params.id);
+    return res.json(user);
 }
 
 /* ************************************************************************************ */
@@ -114,18 +115,14 @@ export const getPlanet = async (req: Request, res: Response): Promise<Response> 
 /* ************************************************************************************ */
 //controlador para el logueo "/login"
 export const login = async (req: Request, res: Response): Promise<Response> =>{
-
     /* Validamos si completo los campos correctamente */
 	if(!req.body.email) throw new Exception("Verifique el email", 400)
 	if(!req.body.password) throw new Exception("Verifique el password", 400)
-
 	// Validamos si existe un usuario con este correo electrónico y contraseña en la base de datos
 	const user = await getRepository(Users).findOne({ where: { email: req.body.email, password: req.body.password }})
 	if(!user) throw new Exception("Email o password incorrecto", 401)
-
 	// Generamos el Token!!!
 	const token = jwt.sign({ user }, process.env.JWT_KEY as string, { expiresIn: 60 * 60 });
-	
 	// Devolvera el usuario y el token creado recientemente al cliente
 	return res.json({ user, token });
 }

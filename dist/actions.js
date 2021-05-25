@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.login = exports.getPlanet = exports.getPlanets = exports.postPlanet = exports.getPostPerson = exports.getPostPersons = exports.postPerson = exports.getUsers = exports.createUser = void 0;
+exports.login = exports.getPlanet = exports.getPlanets = exports.postPlanet = exports.getPostPerson = exports.getPostPersons = exports.postPerson = exports.getUser = exports.createUser = void 0;
 var typeorm_1 = require("typeorm"); // getRepository"  traer una tabla de la base de datos asociada al objeto
 var Users_1 = require("./entities/Users");
 var utils_1 = require("./utils");
@@ -79,19 +79,20 @@ var createUser = function (req, res) { return __awaiter(void 0, void 0, void 0, 
     });
 }); };
 exports.createUser = createUser;
-/* GET todos los usuarios */
-var getUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var users;
+/* Quiero imprimir al usuario actual en la funcion de abajo  */
+/* GET el usuario actual */
+var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, typeorm_1.getRepository(Users_1.Users).find()];
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(Users_1.Users).findOne(req.params.id)];
             case 1:
-                users = _a.sent();
-                return [2 /*return*/, res.json(users)];
+                user = _a.sent();
+                return [2 /*return*/, res.json(user)];
         }
     });
 }); };
-exports.getUsers = getUsers;
+exports.getUser = getUser;
 /* ************************************************************************************ */
 /* PEOPLE - PERSON - POSTPERSON */
 /* Le agregamos el nombre post para no conundir con users */

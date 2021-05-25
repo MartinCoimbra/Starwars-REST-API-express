@@ -46,6 +46,6 @@ var verifyToken = function (req, res, next) {
 */
 /* RUTAS */
 /* leemos todos los usuarios (privado)*/
-/* Luego de hacer login vas  apoder acceder a esto: */
-router.get('/user', verifyToken, utils_1.safe(actions.getUsers));
+/* Luego de hacer login vas a poder acceder a esto: */
+router.get('/user', verifyToken, utils_1.safe(actions.getUser));
 exports["default"] = router;

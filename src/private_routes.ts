@@ -25,8 +25,10 @@ const verifyToken= (req: Request,res:Response, next:NextFunction) =>{
 
 /* RUTAS */
 /* leemos todos los usuarios (privado)*/
-/* Luego de hacer login vas  apoder acceder a esto: */
-router.get('/user',verifyToken, safe(actions.getUsers));
+/* Luego de hacer login vas a poder acceder a esto: */
+router.get('/user/:id',verifyToken, safe(actions.getUser));
+
+/* router.get('/user/:id/favoritos',verifyToken, safe(actions.favoritos)); */
 
 
 export default router;
