@@ -40,6 +40,7 @@ exports.getUsers = exports.createUser = void 0;
 var typeorm_1 = require("typeorm"); // getRepository"  traer una tabla de la base de datos asociada al objeto
 var Users_1 = require("./entities/Users");
 var utils_1 = require("./utils");
+/* Creamos un user con validaciones */
 var createUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var userRepo, user, newUser, results;
     return __generator(this, function (_a) {
@@ -69,6 +70,7 @@ var createUser = function (req, res) { return __awaiter(void 0, void 0, void 0, 
     });
 }); };
 exports.createUser = createUser;
+/* Leemos todos los Users */
 var getUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var users;
     return __generator(this, function (_a) {

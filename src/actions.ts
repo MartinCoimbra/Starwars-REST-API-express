@@ -3,6 +3,7 @@ import { getRepository } from 'typeorm'  // getRepository"  traer una tabla de l
 import { Users } from './entities/Users'
 import { Exception } from './utils'
 
+/* Creamos un user con validaciones */
 export const createUser = async (req: Request, res:Response): Promise<Response> =>{
 
 	// important validations to avoid ambiguos errors, the client needs to understand what went wrong
@@ -21,6 +22,7 @@ export const createUser = async (req: Request, res:Response): Promise<Response> 
 	return res.json(results);
 }
 
+/* Leemos todos los Users */
 export const getUsers = async (req: Request, res: Response): Promise<Response> =>{
 		const users = await getRepository(Users).find();
 		return res.json(users);

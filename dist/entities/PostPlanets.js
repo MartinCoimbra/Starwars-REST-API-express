@@ -24,50 +24,57 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 exports.__esModule = true;
-exports.Users = void 0;
+exports.PostPlanets = void 0;
 var typeorm_1 = require("typeorm");
-var FavPerson_1 = require("./FavPerson");
 var FavsPlanets_1 = require("./FavsPlanets");
-var Users = /** @class */ (function (_super) {
-    __extends(Users, _super);
-    function Users() {
+var PostPlanets = /** @class */ (function (_super) {
+    __extends(PostPlanets, _super);
+    function PostPlanets() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     __decorate([
         typeorm_1.PrimaryGeneratedColumn(),
         __metadata("design:type", Number)
-    ], Users.prototype, "id");
-    __decorate([
-        typeorm_1.Column({ unique: true }),
-        __metadata("design:type", String)
-    ], Users.prototype, "username");
+    ], PostPlanets.prototype, "id");
     __decorate([
         typeorm_1.Column(),
         __metadata("design:type", String)
-    ], Users.prototype, "first_name");
+    ], PostPlanets.prototype, "name");
     __decorate([
         typeorm_1.Column(),
         __metadata("design:type", String)
-    ], Users.prototype, "last_name");
+    ], PostPlanets.prototype, "descripcion");
     __decorate([
-        typeorm_1.Column({ unique: true }),
+        typeorm_1.Column(),
         __metadata("design:type", String)
-    ], Users.prototype, "email");
+    ], PostPlanets.prototype, "climate");
     __decorate([
-        typeorm_1.Column({ unique: true }),
+        typeorm_1.Column(),
         __metadata("design:type", String)
-    ], Users.prototype, "password");
+    ], PostPlanets.prototype, "population");
     __decorate([
-        typeorm_1.OneToMany(function () { return FavPerson_1.FavsPersons; }, function (favspersons) { return favspersons.users; }),
-        __metadata("design:type", Array)
-    ], Users.prototype, "favspersons");
+        typeorm_1.Column(),
+        __metadata("design:type", String)
+    ], PostPlanets.prototype, "orbital_period");
     __decorate([
-        typeorm_1.OneToMany(function () { return FavsPlanets_1.FavsPlanets; }, function (favsplanets) { return favsplanets.users; }),
-        __metadata("design:type", Array)
-    ], Users.prototype, "favsplanets");
-    Users = __decorate([
+        typeorm_1.Column(),
+        __metadata("design:type", String)
+    ], PostPlanets.prototype, "rotation_period");
+    __decorate([
+        typeorm_1.Column(),
+        __metadata("design:type", String)
+    ], PostPlanets.prototype, "diameter");
+    __decorate([
+        typeorm_1.Column(),
+        __metadata("design:type", String)
+    ], PostPlanets.prototype, "foto");
+    __decorate([
+        typeorm_1.OneToMany(function () { return FavsPlanets_1.FavsPlanets; }, function (favsplanets) { return favsplanets.postplanets; }),
+        __metadata("design:type", FavsPlanets_1.FavsPlanets)
+    ], PostPlanets.prototype, "favsplanets");
+    PostPlanets = __decorate([
         typeorm_1.Entity()
-    ], Users);
-    return Users;
+    ], PostPlanets);
+    return PostPlanets;
 }(typeorm_1.BaseEntity));
-exports.Users = Users;
+exports.PostPlanets = PostPlanets;
