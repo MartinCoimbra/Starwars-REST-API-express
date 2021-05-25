@@ -54,7 +54,7 @@ var PostPersons = /** @class */ (function (_super) {
     ], PostPersons.prototype, "gender");
     __decorate([
         typeorm_1.Column(),
-        __metadata("design:type", Number)
+        __metadata("design:type", String)
     ], PostPersons.prototype, "height");
     __decorate([
         typeorm_1.Column(),

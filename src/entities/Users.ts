@@ -3,8 +3,8 @@ import {
     BaseEntity, JoinTable,OneToMany
   } from 'typeorm';
   
-  import {PostPlanets} from "./PostPlanets"
-  import {PostPersons} from "./PostPersons"
+import {PostPlanets} from "./PostPlanets"
+import {PostPersons} from "./PostPersons"
 import { FavsPersons } from './FavPerson';
 import { FavsPlanets } from './FavsPlanets';
 
@@ -14,9 +14,6 @@ import { FavsPlanets } from './FavsPlanets';
     @PrimaryGeneratedColumn()
     id: number;
   
-    @Column({unique: true})
-    username: string;
-
     @Column()
     first_name: string;
   

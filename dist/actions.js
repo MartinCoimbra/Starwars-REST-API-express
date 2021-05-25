@@ -36,11 +36,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.getUsers = exports.createUser = void 0;
+exports.getPostPerson = exports.postPerson = exports.getPostPersons = exports.getUsers = exports.createUser = void 0;
 var typeorm_1 = require("typeorm"); // getRepository"  traer una tabla de la base de datos asociada al objeto
 var Users_1 = require("./entities/Users");
 var utils_1 = require("./utils");
-/* Creamos un user con validaciones */
+var PostPersons_1 = require("./entities/PostPersons");
+/* Creamos 1 user con validaciones */
 var createUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var userRepo, user, newUser, results;
     return __generator(this, function (_a) {
@@ -83,3 +84,70 @@ var getUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
     });
 }); };
 exports.getUsers = getUsers;
+/* ************************************************************************************ */
+/* PEOPLE - PERSON - POSTPERSON */
+/* ************************************************************************************ */
+/* Leemos todos los PERSONAJES*/
+var getPostPersons = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var persons;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(PostPersons_1.PostPersons).find()];
+            case 1:
+                persons = _a.sent();
+                return [2 /*return*/, res.json(persons)];
+        }
+    });
+}); };
+exports.getPostPersons = getPostPersons;
+/* POST *UN 1*  de los PERSONAJE*/
+var postPerson = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var person, newPerson, results;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                /* Validaciones de datos del personaje */
+                if (!req.body.name)
+                    throw new utils_1.Exception("Ingrese nombre ( name )");
+                if (!req.body.descripcion)
+                    throw new utils_1.Exception("Ingrese descripcion ( descripcion )");
+                if (!req.body.birth_year)
+                    throw new utils_1.Exception("Ingrese año de nacimiento ( birth_year )");
+                if (!req.body.gender)
+                    throw new utils_1.Exception("Ingrese Genero ( gender )");
+                if (!req.body.height)
+                    throw new utils_1.Exception("Ingrese Altura ( height )");
+                if (!req.body.skin_color)
+                    throw new utils_1.Exception("Ingrese  Color de piel ( skin_color )");
+                if (!req.body.hair_color)
+                    throw new utils_1.Exception("Ingrese Color de pelo ( hair_color )");
+                if (!req.body.foto)
+                    throw new utils_1.Exception("Ingrese URL de la foto ( foto )");
+                return [4 /*yield*/, typeorm_1.getRepository(PostPersons_1.PostPersons).findOne({ where: { name: req.body.name } })];
+            case 1:
+                person = _a.sent();
+                if (person)
+                    throw new utils_1.Exception("Este personaje ya existe");
+                newPerson = typeorm_1.getRepository(PostPersons_1.PostPersons).create(req.body);
+                return [4 /*yield*/, typeorm_1.getRepository(PostPersons_1.PostPersons).save(newPerson)];
+            case 2:
+                results = _a.sent();
+                return [2 /*return*/, res.json(results)];
+        }
+    });
+}); };
+exports.postPerson = postPerson;
+/* Leemos *UNO 1*  de los PERSONAJES*/
+var getPostPerson = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var person;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(PostPersons_1.PostPersons).findOne(req.params.id)];
+            case 1:
+                person = _a.sent();
+                return [2 /*return*/, res.json(person)];
+        }
+    });
+}); };
+exports.getPostPerson = getPostPerson;
+/* ************************************************************************************ */
