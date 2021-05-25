@@ -13,9 +13,16 @@ const verifyToken= (req: Request,res:Response, next:NextFunction) =>{
     //headers con el token
      const token = req.header('Authorization');
     if(!token) return res.status(400).json('ACCESS DENIED');
-    const decoded = jwt.verify(token as string, process.env.JWT_KEY as string)
-    req.user = decoded;
-    next()
+    try {
+        const decoded = jwt.verify(token as string, process.env.JWT_KEY as string)
+        /* asignamos a req.user para aceder al usuario */
+        req.user = decoded;
+        next()      
+    } catch (error) {
+        /* si surge un error hacemos esto: */
+        return res.status(400).json('ACCESS DENIED'); 
+    }
+  
 }
 
 /*              ⛔ IMPORTANTE ⛔
@@ -26,9 +33,13 @@ const verifyToken= (req: Request,res:Response, next:NextFunction) =>{
 /* RUTAS */
 /* leemos todos los usuarios (privado)*/
 /* Luego de hacer login vas a poder acceder a esto: */
-router.get('/user/:id',verifyToken, safe(actions.getUser));
+/* Leemos el usuario actual namas */
+router.get('/user',verifyToken, safe(actions.getUser));
 
-/* router.get('/user/:id/favoritos',verifyToken, safe(actions.favoritos)); */
+/* NOTA: Todos los datos de aqui son solamente del usuario logeado (recuerda hacer la validacion)*/
+
+/* FAVORITOS (Todos (Planets-Persons)) */
+router.get('/user/favoritos',verifyToken, safe(actions.getFavoritos));
 
 
 export default router;

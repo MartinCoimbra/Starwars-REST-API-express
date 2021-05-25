@@ -5,6 +5,8 @@ import { Exception } from './utils'
 import { PostPersons } from './entities/PostPersons'
 import { PostPlanets } from './entities/PostPlanets'
 import jwt from 'jsonwebtoken'
+import { FavsPersons } from './entities/FavPerson'
+import { FavsPlanets } from './entities/FavsPlanets'
 
 /* ************************************************************************************ */
                             /* USUARIOS - USER's */
@@ -28,10 +30,13 @@ export const createUser = async (req: Request, res:Response): Promise<Response> 
 	return res.json(results);
 }
 
-/* Quiero imprimir al usuario actual en la funcion de abajo  */
 /* GET el usuario actual */
-export const getUser = async (req: Request, res: Response): Promise<Response> =>{
-    const user = await getRepository(Users).findOne(req.params.id);
+export const getUser = async (req: any, res: Response): Promise<Response> =>{
+    if(req.user.user){
+        console.log(req.user.user.id);
+    }
+    console.log(req.user)
+    const user = await getRepository(Users).findOne(req.user.user.id);
     return res.json(user);
 }
 
@@ -126,3 +131,19 @@ export const login = async (req: Request, res: Response): Promise<Response> =>{
 	// Devolvera el usuario y el token creado recientemente al cliente
 	return res.json({ user, token });
 }
+
+/* ************************************************************************************ */
+                            /* FAVORITOS  */
+/* ************************************************************************************ */
+
+export const getFavoritos = async (req: any, res: Response): Promise<Response> =>{
+    /* req.user.user.id usuario logeado */
+    console.log("ENTRAMOS ヾ(⌐■_■)ノ♪");
+    const favoritosPlanets = await getRepository(FavsPlanets).findOne(req.user.user.id);
+    const favoritosPersons = await getRepository(FavsPersons).findOne(req.user.user.id);
+    return res.json({
+        favoritosPersons,
+        favoritosPlanets,
+    });
+}
+

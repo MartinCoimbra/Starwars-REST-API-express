@@ -6,10 +6,11 @@ const router = Router();
 
 // RUTA PUBLICA , cualquiera puede hacer las siguientes acciones.
 
-/* Posteamos 1 usuario (Registro, publico)*/
+/*          REGISTRO 
+* Posteamos 1 usuario (Registro, publico)*/
 router.post('/user', safe(actions.createUser));
 
-/* 
+/*              LOGIN 
 * Nota: Cuando una persona se va iniciar sesion, entra a travez de una ruta publica "/login". 
 * Nota: Cuando vas a ingresar datos (login) vas a hacer un post!. 
 */
