@@ -138,12 +138,41 @@ export const login = async (req: Request, res: Response): Promise<Response> =>{
 
 export const getFavoritos = async (req: any, res: Response): Promise<Response> =>{
     /* req.user.user.id usuario logeado */
-    console.log("ENTRAMOS ヾ(⌐■_■)ノ♪");
-    const favoritosPlanets = await getRepository(FavsPlanets).findOne(req.user.user.id);
-    const favoritosPersons = await getRepository(FavsPersons).findOne(req.user.user.id);
+    const favoritosPlanets = await getRepository(FavsPlanets).findOne({where:{users: req.user.user.id}, 
+        relations: ['postplanets']});
+    const favoritosPersons = await getRepository(FavsPersons).findOne({where:{users: req.user.user.id}, 
+        relations: ['postpersons']});
     return res.json({
         favoritosPersons,
         favoritosPlanets,
     });
 }
 
+export const addPostPlanetFav = async (req: any, res: Response): Promise<Response> =>{
+    /* Verificamos si el planeta existe */
+    const planet = await getRepository(PostPlanets).findOne(req.params.id);
+    if(!planet) throw new Exception("El planeta que selecciono no existe, cambie su id")
+
+    /* Le asignamos los valores a los FK */
+    let newFavorito = new FavsPlanets();
+    newFavorito.users = req.user.user.id;
+    newFavorito.postplanets = planet;
+
+    //Grabo el fav
+    const results = await getRepository(FavsPlanets).save(newFavorito); 
+    return res.json(results);
+} 
+export const addPostPersonFav = async (req: any, res: Response): Promise<Response> =>{
+    /* Verificamos si el planeta existe */
+    const person = await getRepository(PostPersons).findOne(req.params.id);
+    if(!person) throw new Exception("El planeta que selecciono no existe, cambie su id")
+
+    /* Le asignamos los valores a los FK */
+    let newFavorito = new FavsPersons();
+    newFavorito.users = req.user.user.id;
+    newFavorito.postpersons = person;
+
+    //Grabo el fav
+    const results = await getRepository(FavsPersons).save(newFavorito); 
+    return res.json(results);
+} 
