@@ -4,10 +4,16 @@ import * as actions from './actions';
 
 const router = Router();
 
-// RUTA PUBLICA 
+// RUTA PUBLICA , cualquiera puede hacer las siguientes acciones.
 
-/* Posteamos 1 usuario */
+/* Posteamos 1 usuario (Registro, publico)*/
 router.post('/user', safe(actions.createUser));
+
+/* 
+* Nota: Cuando una persona se va iniciar sesion, entra a travez de una ruta publica "/login". 
+* Nota: Cuando vas a ingresar datos (login) vas a hacer un post!. 
+*/
+router.post('/login',safe(actions.login))
 
 
 /* ********************************************************** */
@@ -27,11 +33,6 @@ router.get('/planets', safe(actions.getPlanets))
 /* Ruta get *UNO SOLO* de los planetas */
 router.get('/planet/:id', safe(actions.getPlanet))
 
-
-
-
-/* Ruta GET para las person *(PEOPLE)* PUBLICA */
-/* router.get('/person/:id', safe(actions.getPostPerson)) */
 
 
 
