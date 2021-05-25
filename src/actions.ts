@@ -3,6 +3,7 @@ import { getRepository } from 'typeorm'  // getRepository"  traer una tabla de l
 import { Users } from './entities/Users'
 import { Exception } from './utils'
 import { PostPersons } from './entities/PostPersons'
+import { PostPlanets } from './entities/PostPlanets'
 
 /* Creamos 1 user con validaciones */
 export const createUser = async (req: Request, res:Response): Promise<Response> =>{
@@ -31,13 +32,8 @@ export const getUsers = async (req: Request, res: Response): Promise<Response> =
 
 /* ************************************************************************************ */
                         /* PEOPLE - PERSON - POSTPERSON */
+            /* Le agregamos el nombre post para no conundir con users */
 /* ************************************************************************************ */
-
-/* Leemos todos los PERSONAJES*/
-export const getPostPersons = async (req: Request, res: Response): Promise<Response> =>{
-    const persons = await getRepository(PostPersons).find();
-    return res.json(persons);
-}
 
 /* POST *UN 1*  de los PERSONAJE*/
 export const postPerson = async (req: Request, res: Response): Promise<Response> =>{
@@ -62,9 +58,50 @@ export const postPerson = async (req: Request, res: Response): Promise<Response>
 
 }
 
+/* Leemos todos los PERSONAJES*/
+export const getPostPersons = async (req: Request, res: Response): Promise<Response> =>{
+    const persons = await getRepository(PostPersons).find();
+    return res.json(persons);
+}
+
 /* Leemos *UNO 1*  de los PERSONAJES*/
 export const getPostPerson = async (req: Request, res: Response): Promise<Response> =>{
     const person = await getRepository(PostPersons).findOne(req.params.id);
     return res.json(person);
 }
+
 /* ************************************************************************************ */
+                            /* PLANETS - PLANETAS  */
+/* ************************************************************************************ */
+/* POST *UN 1*  de los Planeta*/
+export const postPlanet = async (req: Request, res: Response): Promise<Response> =>{
+    
+    /* Validaciones de datos del Planeta */
+    if(!req.body.name) throw new Exception("Ingrese nombre ( name )")
+    if(!req.body.descripcion) throw new Exception("Ingrese descripcion ( descripcion )")
+    if(!req.body.climate) throw new Exception("Ingrese año de Clima ( climate )")
+    if(!req.body.population) throw new Exception("Ingrese población ( population )")
+    if(!req.body.orbital_period) throw new Exception("Ingrese periodo orbital ( orbital_period )")
+    if(!req.body.rotation_period) throw new Exception("Ingrese período_de_rotación ( rotation_period )")
+    if(!req.body.diameter) throw new Exception("Ingrese diámetro ( diameter )")
+    if(!req.body.foto) throw new Exception("Ingrese URL de la foto ( foto )")
+    
+    /* Traemos todos los planetas para validar que no haya otro igual con el mismo nombre */
+    const planet = await getRepository(PostPlanets).findOne({ where: {name: req.body.name }})
+    if(planet) throw new Exception("Este planeta ya existe")
+    
+    const newPlanet = getRepository(PostPlanets).create(req.body);  //Creo un planeta con los dato del body
+	const results = await getRepository(PostPlanets).save(newPlanet); //Grabo el nuevo planeta
+	return res.json(results);
+
+}
+/* Leemos todos los PLANETAS*/
+export const getPlanets = async (req: Request, res: Response): Promise<Response> =>{
+    const planets = await getRepository(PostPlanets).find();
+    return res.json(planets);
+}
+/* Leemos *UNO 1*  de los PLANETAS*/
+export const getPlanet = async (req: Request, res: Response): Promise<Response> =>{
+    const planet = await getRepository(PostPlanets).findOne(req.params.id);
+    return res.json(planet);
+}

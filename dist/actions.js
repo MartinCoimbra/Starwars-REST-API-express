@@ -36,11 +36,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.getPostPerson = exports.postPerson = exports.getPostPersons = exports.getUsers = exports.createUser = void 0;
+exports.getPlanet = exports.getPlanets = exports.postPlanet = exports.getPostPerson = exports.getPostPersons = exports.postPerson = exports.getUsers = exports.createUser = void 0;
 var typeorm_1 = require("typeorm"); // getRepository"  traer una tabla de la base de datos asociada al objeto
 var Users_1 = require("./entities/Users");
 var utils_1 = require("./utils");
 var PostPersons_1 = require("./entities/PostPersons");
+var PostPlanets_1 = require("./entities/PostPlanets");
 /* Creamos 1 user con validaciones */
 var createUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var userRepo, user, newUser, results;
@@ -86,20 +87,8 @@ var getUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
 exports.getUsers = getUsers;
 /* ************************************************************************************ */
 /* PEOPLE - PERSON - POSTPERSON */
+/* Le agregamos el nombre post para no conundir con users */
 /* ************************************************************************************ */
-/* Leemos todos los PERSONAJES*/
-var getPostPersons = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var persons;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, typeorm_1.getRepository(PostPersons_1.PostPersons).find()];
-            case 1:
-                persons = _a.sent();
-                return [2 /*return*/, res.json(persons)];
-        }
-    });
-}); };
-exports.getPostPersons = getPostPersons;
 /* POST *UN 1*  de los PERSONAJE*/
 var postPerson = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var person, newPerson, results;
@@ -137,6 +126,19 @@ var postPerson = function (req, res) { return __awaiter(void 0, void 0, void 0, 
     });
 }); };
 exports.postPerson = postPerson;
+/* Leemos todos los PERSONAJES*/
+var getPostPersons = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var persons;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(PostPersons_1.PostPersons).find()];
+            case 1:
+                persons = _a.sent();
+                return [2 /*return*/, res.json(persons)];
+        }
+    });
+}); };
+exports.getPostPersons = getPostPersons;
 /* Leemos *UNO 1*  de los PERSONAJES*/
 var getPostPerson = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var person;
@@ -151,3 +153,68 @@ var getPostPerson = function (req, res) { return __awaiter(void 0, void 0, void 
 }); };
 exports.getPostPerson = getPostPerson;
 /* ************************************************************************************ */
+/* PLANETS - PLANETAS  */
+/* ************************************************************************************ */
+/* POST *UN 1*  de los Planeta*/
+var postPlanet = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var planet, newPlanet, results;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                /* Validaciones de datos del Planeta */
+                if (!req.body.name)
+                    throw new utils_1.Exception("Ingrese nombre ( name )");
+                if (!req.body.descripcion)
+                    throw new utils_1.Exception("Ingrese descripcion ( descripcion )");
+                if (!req.body.climate)
+                    throw new utils_1.Exception("Ingrese año de Clima ( climate )");
+                if (!req.body.population)
+                    throw new utils_1.Exception("Ingrese población ( population )");
+                if (!req.body.orbital_period)
+                    throw new utils_1.Exception("Ingrese periodo orbital ( orbital_period )");
+                if (!req.body.rotation_period)
+                    throw new utils_1.Exception("Ingrese período_de_rotación ( rotation_period )");
+                if (!req.body.diameter)
+                    throw new utils_1.Exception("Ingrese diámetro ( diameter )");
+                if (!req.body.foto)
+                    throw new utils_1.Exception("Ingrese URL de la foto ( foto )");
+                return [4 /*yield*/, typeorm_1.getRepository(PostPlanets_1.PostPlanets).findOne({ where: { name: req.body.name } })];
+            case 1:
+                planet = _a.sent();
+                if (planet)
+                    throw new utils_1.Exception("Este planeta ya existe");
+                newPlanet = typeorm_1.getRepository(PostPlanets_1.PostPlanets).create(req.body);
+                return [4 /*yield*/, typeorm_1.getRepository(PostPlanets_1.PostPlanets).save(newPlanet)];
+            case 2:
+                results = _a.sent();
+                return [2 /*return*/, res.json(results)];
+        }
+    });
+}); };
+exports.postPlanet = postPlanet;
+/* Leemos todos los PLANETAS*/
+var getPlanets = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var planets;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(PostPlanets_1.PostPlanets).find()];
+            case 1:
+                planets = _a.sent();
+                return [2 /*return*/, res.json(planets)];
+        }
+    });
+}); };
+exports.getPlanets = getPlanets;
+/* Leemos *UNO 1*  de los PLANETAS*/
+var getPlanet = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var planet;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(PostPlanets_1.PostPlanets).findOne(req.params.id)];
+            case 1:
+                planet = _a.sent();
+                return [2 /*return*/, res.json(planet)];
+        }
+    });
+}); };
+exports.getPlanet = getPlanet;

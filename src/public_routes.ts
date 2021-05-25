@@ -9,11 +9,25 @@ const router = Router();
 /* Posteamos 1 usuario */
 router.post('/user', safe(actions.createUser));
 
+
+/* ********************************************************** */
+                    /* PERSONAJES RUTAS */
+/* POST una 1 person  */
+router.post('/person', safe(actions.postPerson))
 /* Ruta GET para TODOS los persons *(PEOPLE)* - PERSONAJES - */
 router.get('/persons', safe(actions.getPostPersons))
+/* Ruta get *UNO SOLO* de los personajes */
+router.get('/person/:id', safe(actions.getPostPerson))
+/* ********************************************************** */
+                    /* RUTAS PLANETS */
+/* Ruta POST 1 planet */
+router.post('/planet', safe(actions.postPlanet))
+/* Ruta get TODOS los personajes */
+router.get('/planets', safe(actions.getPlanets))
+/* Ruta get *UNO SOLO* de los planetas */
+router.get('/planet/:id', safe(actions.getPlanet))
 
-/* POST una person  */
-router.post('/person', safe(actions.postPerson))
+
 
 
 /* Ruta GET para las person *(PEOPLE)* PUBLICA */

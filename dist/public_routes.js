@@ -26,10 +26,22 @@ var router = express_1.Router();
 // RUTA PUBLICA 
 /* Posteamos 1 usuario */
 router.post('/user', utils_1.safe(actions.createUser));
+/* ********************************************************** */
+/* PERSONAJES RUTAS */
+/* POST una 1 person  */
+router.post('/person', utils_1.safe(actions.postPerson));
 /* Ruta GET para TODOS los persons *(PEOPLE)* - PERSONAJES - */
 router.get('/persons', utils_1.safe(actions.getPostPersons));
-/* POST una person  */
-router.post('/person', utils_1.safe(actions.postPerson));
+/* Ruta get *UNO SOLO* de los personajes */
+router.get('/person/:id', utils_1.safe(actions.getPostPerson));
+/* ********************************************************** */
+/* RUTAS PLANETS */
+/* Ruta POST 1 planet */
+router.post('/planet', utils_1.safe(actions.postPlanet));
+/* Ruta get TODOS los personajes */
+router.get('/planets', utils_1.safe(actions.getPlanets));
+/* Ruta get *UNO SOLO* de los planetas */
+router.get('/planet/:id', utils_1.safe(actions.getPlanet));
 /* Ruta GET para las person *(PEOPLE)* PUBLICA */
 /* router.get('/person/:id', safe(actions.getPostPerson)) */
 exports["default"] = router;
