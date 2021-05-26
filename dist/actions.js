@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.deletePostPersonFav = exports.deletePostPlanetFav = exports.addPostPersonFav = exports.addPostPlanetFav = exports.getFavoritos = exports.login = exports.getPlanet = exports.getPlanets = exports.postPlanet = exports.getPostPerson = exports.getPostPersons = exports.postPerson = exports.getUser = exports.createUser = void 0;
+exports.deletePostPersonFav = exports.deletePostPlanetFav = exports.addPostPersonFav = exports.addPostPlanetFav = exports.getFavoritos = exports.login = exports.putPostPlanet = exports.getPlanet = exports.getPlanets = exports.postPlanet = exports.putPostPerson = exports.getPostPerson = exports.getPostPersons = exports.postPerson = exports.getUser = exports.createUser = void 0;
 var typeorm_1 = require("typeorm");
 var Users_1 = require("./entities/Users");
 var utils_1 = require("./utils");
@@ -162,6 +162,25 @@ var getPostPerson = function (req, res) { return __awaiter(void 0, void 0, void 
     });
 }); };
 exports.getPostPerson = getPostPerson;
+/* PUT (UPDATE) *UNO 1* PERSONAJE*/
+var putPostPerson = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var person, results;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(PostPersons_1.PostPersons).findOne(req.params.id)];
+            case 1:
+                person = _a.sent();
+                if (!person) return [3 /*break*/, 3];
+                typeorm_1.getRepository(PostPersons_1.PostPersons).merge(person, req.body);
+                return [4 /*yield*/, typeorm_1.getRepository(PostPersons_1.PostPersons).save(person)];
+            case 2:
+                results = _a.sent();
+                return [2 /*return*/, res.json(results)];
+            case 3: return [2 /*return*/, res.json({ msg: "Personaje no encontrado" })];
+        }
+    });
+}); };
+exports.putPostPerson = putPostPerson;
 /* ************************************************************************************ */
 /* PLANETS - PLANETAS  */
 /* ************************************************************************************ */
@@ -227,6 +246,25 @@ var getPlanet = function (req, res) { return __awaiter(void 0, void 0, void 0, f
     });
 }); };
 exports.getPlanet = getPlanet;
+/* PUT (UPDATE) *UNO 1* Planeta*/
+var putPostPlanet = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var planet, results;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(PostPlanets_1.PostPlanets).findOne(req.params.id)];
+            case 1:
+                planet = _a.sent();
+                if (!planet) return [3 /*break*/, 3];
+                typeorm_1.getRepository(PostPlanets_1.PostPlanets).merge(planet, req.body);
+                return [4 /*yield*/, typeorm_1.getRepository(PostPlanets_1.PostPlanets).save(planet)];
+            case 2:
+                results = _a.sent();
+                return [2 /*return*/, res.json(results)];
+            case 3: return [2 /*return*/, res.json({ msg: "Planeta no encontrado" })];
+        }
+    });
+}); };
+exports.putPostPlanet = putPostPlanet;
 /* ************************************************************************************ */
 /* TOKEN - LOGIN  */
 /* ************************************************************************************ */
@@ -302,7 +340,7 @@ var addPostPersonFav = function (req, res) { return __awaiter(void 0, void 0, vo
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                userID = req.user.user.id;
+                userID = req.user.user;
                 return [4 /*yield*/, typeorm_1.getRepository(PostPersons_1.PostPersons).findOne(req.params.id)];
             case 1:
                 person = _a.sent();
@@ -325,7 +363,7 @@ var deletePostPlanetFav = function (req, res) { return __awaiter(void 0, void 0,
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                userID = req.user.user.id;
+                userID = req.user.user;
                 return [4 /*yield*/, typeorm_1.getRepository(FavsPlanets_1.FavsPlanets).findOne({
                         relations: ['postplanets'],
                         where: {
@@ -350,7 +388,7 @@ var deletePostPersonFav = function (req, res) { return __awaiter(void 0, void 0,
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                userID = req.user.user.id;
+                userID = req.user.user;
                 return [4 /*yield*/, typeorm_1.getRepository(FavPerson_1.FavsPersons).findOne({
                         relations: ['postpersons'],
                         where: {
@@ -370,3 +408,4 @@ var deletePostPersonFav = function (req, res) { return __awaiter(void 0, void 0,
     });
 }); };
 exports.deletePostPersonFav = deletePostPersonFav;
+/* ************************************************************************************ */

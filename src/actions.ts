@@ -37,7 +37,6 @@ export const getUser = async (req: Request, res: Response): Promise<Response> =>
                         /* PEOPLE - PERSON - POSTPERSON */
             /* Le agregamos el nombre post para no conundir con users */
 /* ************************************************************************************ */
-
 /* POST *UN 1*  de los PERSONAJE*/
 export const postPerson = async (req: Request, res: Response): Promise<Response> =>{
     if(!req.body.name) throw new Exception("Ingrese nombre ( name )")
@@ -60,12 +59,22 @@ export const getPostPersons = async (req: Request, res: Response): Promise<Respo
     const persons = await getRepository(PostPersons).find();
     return res.json(persons);
 }
-
 /* GET *UNO 1* PERSONAJE*/
 export const getPostPerson = async (req: Request, res: Response): Promise<Response> =>{
     const person = await getRepository(PostPersons).findOne(req.params.id);
     return res.json(person);
 }
+/* PUT (UPDATE) *UNO 1* PERSONAJE*/
+export const putPostPerson = async (req: Request, res: Response): Promise<Response> =>{
+        const person = await getRepository(PostPersons).findOne(req.params.id);
+        if(person){
+            getRepository(PostPersons).merge(person, req.body); 
+            const results = await getRepository(PostPersons).save(person)
+            return res.json(results);
+        }
+        return res.json({msg: "Personaje no encontrado"})
+}
+
 /* ************************************************************************************ */
                             /* PLANETS - PLANETAS  */
 /* ************************************************************************************ */
@@ -97,6 +106,16 @@ export const getPlanet = async (req: Request, res: Response): Promise<Response> 
     const planet = await getRepository(PostPlanets).findOne(req.params.id);
     return res.json(planet);
 }
+/* PUT (UPDATE) *UNO 1* Planeta*/
+export const putPostPlanet = async (req: Request, res: Response): Promise<Response> =>{
+        const planet = await getRepository(PostPlanets).findOne(req.params.id);
+        if(planet){
+            getRepository(PostPlanets).merge(planet, req.body); 
+            const results = await getRepository(PostPlanets).save(planet)
+            return res.json(results);
+        }
+        return res.json({msg: "Planeta no encontrado"})
+}
 /* ************************************************************************************ */
                             /* TOKEN - LOGIN  */
 /* ************************************************************************************ */
@@ -124,7 +143,6 @@ export const getFavoritos = async (req: Request, res: Response): Promise<Respons
         favoritosPlanets,
     });
 }
-
 export const addPostPlanetFav = async (req: Request, res: Response): Promise<Response> =>{
     const userID = (req.user as ObjectLiteral).user.id; 
     /* Verificamos si el planeta existe */
@@ -186,3 +204,4 @@ export const deletePostPersonFav = async (req: Request, res: Response): Promise<
             return res.json(result);
         }
 } 
+/* ************************************************************************************ */

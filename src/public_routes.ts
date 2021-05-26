@@ -25,16 +25,20 @@ router.post('/person', safe(actions.postPerson))
 router.get('/persons', safe(actions.getPostPersons))
 /* Ruta get *UNO SOLO* de los personajes */
 router.get('/person/:id', safe(actions.getPostPerson))
+/* Ruta PUT (UPDATE) *UNO SOLO* de los personajes */
+router.put('/person/:id', safe(actions.putPostPerson))
+
+
 /* ********************************************************** */
                     /* RUTAS PLANETS */
 /* Ruta POST 1 planet */
 router.post('/planet', safe(actions.postPlanet))
-/* Ruta get TODOS los personajes */
+/* Ruta get TODOS los planetas */
 router.get('/planets', safe(actions.getPlanets))
 /* Ruta get *UNO SOLO* de los planetas */
 router.get('/planet/:id', safe(actions.getPlanet))
-
-
+/* Ruta PUT *UNO SOLO* de los planetas*/
+router.put('/planet/:id', safe(actions.putPostPlanet))
 
 
 

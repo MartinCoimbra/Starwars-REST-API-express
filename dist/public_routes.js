@@ -40,12 +40,16 @@ router.post('/person', utils_1.safe(actions.postPerson));
 router.get('/persons', utils_1.safe(actions.getPostPersons));
 /* Ruta get *UNO SOLO* de los personajes */
 router.get('/person/:id', utils_1.safe(actions.getPostPerson));
+/* Ruta PUT (UPDATE) *UNO SOLO* de los personajes */
+router.put('/person/:id', utils_1.safe(actions.putPostPerson));
 /* ********************************************************** */
 /* RUTAS PLANETS */
 /* Ruta POST 1 planet */
 router.post('/planet', utils_1.safe(actions.postPlanet));
-/* Ruta get TODOS los personajes */
+/* Ruta get TODOS los planetas */
 router.get('/planets', utils_1.safe(actions.getPlanets));
 /* Ruta get *UNO SOLO* de los planetas */
 router.get('/planet/:id', utils_1.safe(actions.getPlanet));
+/* Ruta PUT *UNO SOLO* de los planetas*/
+router.put('/planet/:id', utils_1.safe(actions.putPostPlanet));
 exports["default"] = router;
