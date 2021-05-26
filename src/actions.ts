@@ -25,12 +25,11 @@ export const createUser = async (req: Request, res:Response): Promise<Response> 
 }
 
 /* GET el usuario actual */
-export const getUser = async (req: any, res: Response): Promise<Response> =>{
-    if(req.user.user){
-        console.log(req.user.user.id);
-    }
+export const getUser = async (req: Request, res: Response): Promise<Response> =>{
+    const userID = (req.user as ObjectLiteral).user.id; 
+   
     console.log(req.user)
-    const user = await getRepository(Users).findOne(req.user.user.id);
+    const user = await getRepository(Users).findOne(userID);
     return res.json(user);
 }
 
@@ -113,11 +112,12 @@ export const login = async (req: Request, res: Response): Promise<Response> =>{
 /* ************************************************************************************ */
                             /* FAVORITOS  */
 /* ************************************************************************************ */
-export const getFavoritos = async (req: any, res: Response): Promise<Response> =>{
+export const getFavoritos = async (req: Request, res: Response): Promise<Response> =>{
+    const userID = (req.user as ObjectLiteral).user.id; 
     /* req.user.user.id usuario logeado */
-    const favoritosPlanets = await getRepository(FavsPlanets).find({where:{users: req.user.user.id}, 
+    const favoritosPlanets = await getRepository(FavsPlanets).find({where:{users: userID}, 
         relations: ['postplanets']});
-    const favoritosPersons = await getRepository(FavsPersons).find({where:{users: req.user.user.id}, 
+    const favoritosPersons = await getRepository(FavsPersons).find({where:{users: userID}, 
         relations: ['postpersons']});
     return res.json({
         favoritosPersons,
@@ -125,9 +125,9 @@ export const getFavoritos = async (req: any, res: Response): Promise<Response> =
     });
 }
 
-export const addPostPlanetFav = async (req: any, res: Response): Promise<Response> =>{
+export const addPostPlanetFav = async (req: Request, res: Response): Promise<Response> =>{
+    const userID = (req.user as ObjectLiteral).user.id; 
     /* Verificamos si el planeta existe */
-    const userID = (req.user as ObjectLiteral).id;
     const planet = await getRepository(PostPlanets).findOne(req.params.id);
     if(!planet) throw new Exception("El planeta que selecciono no existe, cambie su id")
     /* Le asignamos los valores a los FK */
@@ -138,9 +138,9 @@ export const addPostPlanetFav = async (req: any, res: Response): Promise<Respons
     const results = await getRepository(FavsPlanets).save(newFavorito);   //Grabo el fav
     return res.json(results);
 } 
-export const addPostPersonFav = async (req: any, res: Response): Promise<Response> =>{
+export const addPostPersonFav = async (req: Request, res: Response): Promise<Response> =>{
     /* Verificamos si el planeta existe */
-    const userID = (req.user as ObjectLiteral).id;
+    const userID = (req.user as ObjectLiteral).user.id;
     const person = await getRepository(PostPersons).findOne(req.params.id);
     if(!person) throw new Exception("El planeta que selecciono no existe, cambie su id")
     /* Le asignamos los valores a los FK */
@@ -151,13 +151,13 @@ export const addPostPersonFav = async (req: any, res: Response): Promise<Respons
     return res.json(results);
 } 
 /* DELETE (:id) */
-export const deletePostPlanetFav = async (req: any, res: Response): Promise<Response> =>{
-    /* const userID = (req.user as ObjectLiteral).id; */
+export const deletePostPlanetFav = async (req: Request, res: Response): Promise<Response> =>{
+    const userID = (req.user as ObjectLiteral).user.id;
     const favoritoPlanet = await getRepository(FavsPlanets).findOne(
          {
             relations: ['postplanets'],
             where:{
-                users: req.user.user.id,
+                users: userID,
                 postplanets: req.params.id 
             }
          });
@@ -169,12 +169,13 @@ export const deletePostPlanetFav = async (req: any, res: Response): Promise<Resp
             return res.json(result);
         }
 } 
-export const deletePostPersonFav = async (req: any, res: Response): Promise<Response> =>{
+export const deletePostPersonFav = async (req: Request, res: Response): Promise<Response> =>{
+    const userID = (req.user as ObjectLiteral).user.id;
     const favoritoPerson = await getRepository(FavsPersons).findOne(
          {
             relations: ['postpersons'],
             where:{
-                users: req.user.user.id,
+                users: userID,
                 postpersons: req.params.id 
             }
          });
