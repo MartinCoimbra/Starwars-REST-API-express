@@ -23,26 +23,21 @@ var express_1 = require("express");
 var utils_1 = require("./utils");
 var actions = __importStar(require("./actions"));
 var router = express_1.Router();
-// RUTA PUBLICA , cualquiera puede hacer las siguientes acciones.
-/*          REGISTRO
-* Posteamos 1 usuario (Registro, publico)*/
+/*REGISTRO */
 router.post('/user', utils_1.safe(actions.createUser));
-/*              LOGIN
-* Nota: Cuando una persona se va iniciar sesion, entra a travez de una ruta publica "/login".
-* Nota: Cuando vas a ingresar datos (login) vas a hacer un post!.
-*/
+/*LOGIN - POST*/
 router.post('/login', utils_1.safe(actions.login));
-/* ********************************************************** */
 /* PERSONAJES RUTAS */
 /* POST una 1 person  */
 router.post('/person', utils_1.safe(actions.postPerson));
-/* Ruta GET para TODOS los persons *(PEOPLE)* - PERSONAJES - */
+/* Ruta GET para TODOS los persons*/
 router.get('/persons', utils_1.safe(actions.getPostPersons));
 /* Ruta get *UNO SOLO* de los personajes */
 router.get('/person/:id', utils_1.safe(actions.getPostPerson));
 /* Ruta PUT (UPDATE) *UNO SOLO* de los personajes */
 router.put('/person/:id', utils_1.safe(actions.putPostPerson));
-/* ********************************************************** */
+/* Ruta DELETE *UNO SOLO* de los personajes */
+router["delete"]('/person/:id', utils_1.safe(actions.deletePostPerson));
 /* RUTAS PLANETS */
 /* Ruta POST 1 planet */
 router.post('/planet', utils_1.safe(actions.postPlanet));
@@ -52,4 +47,6 @@ router.get('/planets', utils_1.safe(actions.getPlanets));
 router.get('/planet/:id', utils_1.safe(actions.getPlanet));
 /* Ruta PUT *UNO SOLO* de los planetas*/
 router.put('/planet/:id', utils_1.safe(actions.putPostPlanet));
+/* Ruta DELETE *UNO SOLO* de los planetas */
+router["delete"]('/planet/:id', utils_1.safe(actions.deletePostPlanet));
 exports["default"] = router;

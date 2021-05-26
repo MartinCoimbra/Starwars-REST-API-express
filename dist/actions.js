@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.deletePostPersonFav = exports.deletePostPlanetFav = exports.addPostPersonFav = exports.addPostPlanetFav = exports.getFavoritos = exports.login = exports.putPostPlanet = exports.getPlanet = exports.getPlanets = exports.postPlanet = exports.putPostPerson = exports.getPostPerson = exports.getPostPersons = exports.postPerson = exports.getUser = exports.createUser = void 0;
+exports.deletePostPersonFav = exports.deletePostPlanetFav = exports.addPostPersonFav = exports.addPostPlanetFav = exports.getFavoritos = exports.login = exports.deletePostPlanet = exports.putPostPlanet = exports.getPlanet = exports.getPlanets = exports.postPlanet = exports.deletePostPerson = exports.putPostPerson = exports.getPostPerson = exports.getPostPersons = exports.postPerson = exports.getUser = exports.createUser = void 0;
 var typeorm_1 = require("typeorm");
 var Users_1 = require("./entities/Users");
 var utils_1 = require("./utils");
@@ -181,6 +181,24 @@ var putPostPerson = function (req, res) { return __awaiter(void 0, void 0, void 
     });
 }); };
 exports.putPostPerson = putPostPerson;
+/* DELETE *UNO 1* Personajes*/
+var deletePostPerson = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var person, result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(PostPersons_1.PostPersons).findOne(req.params.id)];
+            case 1:
+                person = _a.sent();
+                if (!!person) return [3 /*break*/, 2];
+                return [2 /*return*/, res.json({ "messager": "El personaje que quiere eliminar no existe" })];
+            case 2: return [4 /*yield*/, typeorm_1.getRepository(PostPersons_1.PostPersons)["delete"](person)];
+            case 3:
+                result = _a.sent();
+                return [2 /*return*/, res.json(result)];
+        }
+    });
+}); };
+exports.deletePostPerson = deletePostPerson;
 /* ************************************************************************************ */
 /* PLANETS - PLANETAS  */
 /* ************************************************************************************ */
@@ -265,6 +283,24 @@ var putPostPlanet = function (req, res) { return __awaiter(void 0, void 0, void 
     });
 }); };
 exports.putPostPlanet = putPostPlanet;
+/* DELETE *UNO 1* Planeta*/
+var deletePostPlanet = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var planet, result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(PostPlanets_1.PostPlanets).findOne(req.params.id)];
+            case 1:
+                planet = _a.sent();
+                if (!!planet) return [3 /*break*/, 2];
+                return [2 /*return*/, res.json({ "messager": "El planeta que quiere eliminar no existe" })];
+            case 2: return [4 /*yield*/, typeorm_1.getRepository(PostPlanets_1.PostPlanets)["delete"](planet)];
+            case 3:
+                result = _a.sent();
+                return [2 /*return*/, res.json(result)];
+        }
+    });
+}); };
+exports.deletePostPlanet = deletePostPlanet;
 /* ************************************************************************************ */
 /* TOKEN - LOGIN  */
 /* ************************************************************************************ */
@@ -291,6 +327,7 @@ exports.login = login;
 /* ************************************************************************************ */
 /* FAVORITOS  */
 /* ************************************************************************************ */
+/* ******* GET FAV (:id) ******* */
 var getFavoritos = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var userID, favoritosPlanets, favoritosPersons;
     return __generator(this, function (_a) {
@@ -313,6 +350,7 @@ var getFavoritos = function (req, res) { return __awaiter(void 0, void 0, void 0
     });
 }); };
 exports.getFavoritos = getFavoritos;
+/* ******* ADD FAV (:id) ******* */
 var addPostPlanetFav = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var userID, planet, newFavorito, results;
     return __generator(this, function (_a) {
@@ -357,7 +395,7 @@ var addPostPersonFav = function (req, res) { return __awaiter(void 0, void 0, vo
     });
 }); };
 exports.addPostPersonFav = addPostPersonFav;
-/* DELETE (:id) */
+/* ******* DELETE FAV (:id) ******* */
 var deletePostPlanetFav = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var userID, favoritoPlanet, result;
     return __generator(this, function (_a) {
@@ -408,4 +446,3 @@ var deletePostPersonFav = function (req, res) { return __awaiter(void 0, void 0,
     });
 }); };
 exports.deletePostPersonFav = deletePostPersonFav;
-/* ************************************************************************************ */

@@ -23,7 +23,6 @@ export const createUser = async (req: Request, res:Response): Promise<Response> 
 	const results = await getRepository(Users).save(newUser); //Grabo el nuevo usuario 
 	return res.json(results);
 }
-
 /* GET el usuario actual */
 export const getUser = async (req: Request, res: Response): Promise<Response> =>{
     const userID = (req.user as ObjectLiteral).user.id; 
@@ -32,7 +31,6 @@ export const getUser = async (req: Request, res: Response): Promise<Response> =>
     const user = await getRepository(Users).findOne(userID);
     return res.json(user);
 }
-
 /* ************************************************************************************ */
                         /* PEOPLE - PERSON - POSTPERSON */
             /* Le agregamos el nombre post para no conundir con users */
@@ -74,7 +72,16 @@ export const putPostPerson = async (req: Request, res: Response): Promise<Respon
         }
         return res.json({msg: "Personaje no encontrado"})
 }
-
+/* DELETE *UNO 1* Personajes*/
+export const deletePostPerson = async (req: Request, res: Response): Promise<Response> =>{
+         const person = await getRepository(PostPersons).findOne(req.params.id);
+        if(!person){
+            return res.json({"messager":"El personaje que quiere eliminar no existe"})
+        }else{
+            const result = await getRepository(PostPersons).delete(person);
+            return res.json(result);
+        }
+}
 /* ************************************************************************************ */
                             /* PLANETS - PLANETAS  */
 /* ************************************************************************************ */
@@ -116,6 +123,16 @@ export const putPostPlanet = async (req: Request, res: Response): Promise<Respon
         }
         return res.json({msg: "Planeta no encontrado"})
 }
+/* DELETE *UNO 1* Planeta*/
+export const deletePostPlanet = async (req: Request, res: Response): Promise<Response> =>{
+         const planet = await getRepository(PostPlanets).findOne(req.params.id);
+        if(!planet){
+            return res.json({"messager":"El planeta que quiere eliminar no existe"})
+        }else{
+            const result = await getRepository(PostPlanets).delete(planet);
+            return res.json(result);
+        }
+}
 /* ************************************************************************************ */
                             /* TOKEN - LOGIN  */
 /* ************************************************************************************ */
@@ -131,6 +148,7 @@ export const login = async (req: Request, res: Response): Promise<Response> =>{
 /* ************************************************************************************ */
                             /* FAVORITOS  */
 /* ************************************************************************************ */
+/* ******* GET FAV (:id) ******* */
 export const getFavoritos = async (req: Request, res: Response): Promise<Response> =>{
     const userID = (req.user as ObjectLiteral).user.id; 
     /* req.user.user.id usuario logeado */
@@ -143,6 +161,7 @@ export const getFavoritos = async (req: Request, res: Response): Promise<Respons
         favoritosPlanets,
     });
 }
+/* ******* ADD FAV (:id) ******* */
 export const addPostPlanetFav = async (req: Request, res: Response): Promise<Response> =>{
     const userID = (req.user as ObjectLiteral).user.id; 
     /* Verificamos si el planeta existe */
@@ -168,7 +187,7 @@ export const addPostPersonFav = async (req: Request, res: Response): Promise<Res
     const results = await getRepository(FavsPersons).save(newFavorito);    //Grabo el fav
     return res.json(results);
 } 
-/* DELETE (:id) */
+/* ******* DELETE FAV (:id) ******* */
 export const deletePostPlanetFav = async (req: Request, res: Response): Promise<Response> =>{
     const userID = (req.user as ObjectLiteral).user;
     const favoritoPlanet = await getRepository(FavsPlanets).findOne(
@@ -204,4 +223,3 @@ export const deletePostPersonFav = async (req: Request, res: Response): Promise<
             return res.json(result);
         }
 } 
-/* ************************************************************************************ */
