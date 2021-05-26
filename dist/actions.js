@@ -40,7 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 exports.deletePostPersonFav = exports.deletePostPlanetFav = exports.addPostPersonFav = exports.addPostPlanetFav = exports.getFavoritos = exports.login = exports.getPlanet = exports.getPlanets = exports.postPlanet = exports.getPostPerson = exports.getPostPersons = exports.postPerson = exports.getUser = exports.createUser = void 0;
-var typeorm_1 = require("typeorm"); // getRepository"  traer una tabla de la base de datos asociada al objeto
+var typeorm_1 = require("typeorm");
 var Users_1 = require("./entities/Users");
 var utils_1 = require("./utils");
 var PostPersons_1 = require("./entities/PostPersons");
@@ -57,7 +57,6 @@ var createUser = function (req, res) { return __awaiter(void 0, void 0, void 0, 
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                // important validations to avoid ambiguos errors, the client needs to understand what went wrong
                 if (!req.body.first_name)
                     throw new utils_1.Exception("Please provide a first_name");
                 if (!req.body.last_name)
@@ -109,7 +108,6 @@ var postPerson = function (req, res) { return __awaiter(void 0, void 0, void 0, 
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                /* Validaciones de datos del personaje */
                 if (!req.body.name)
                     throw new utils_1.Exception("Ingrese nombre ( name )");
                 if (!req.body.descripcion)
@@ -140,7 +138,7 @@ var postPerson = function (req, res) { return __awaiter(void 0, void 0, void 0, 
     });
 }); };
 exports.postPerson = postPerson;
-/* Leemos todos los PERSONAJES*/
+/* GET (todos) PERSONAJES*/
 var getPostPersons = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var persons;
     return __generator(this, function (_a) {
@@ -153,7 +151,7 @@ var getPostPersons = function (req, res) { return __awaiter(void 0, void 0, void
     });
 }); };
 exports.getPostPersons = getPostPersons;
-/* Leemos *UNO 1*  de los PERSONAJES*/
+/* GET *UNO 1* PERSONAJE*/
 var getPostPerson = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var person;
     return __generator(this, function (_a) {
@@ -169,13 +167,12 @@ exports.getPostPerson = getPostPerson;
 /* ************************************************************************************ */
 /* PLANETS - PLANETAS  */
 /* ************************************************************************************ */
-/* POST *UN 1*  de los Planeta*/
+/* POST *UN 1* Planeta*/
 var postPlanet = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var planet, newPlanet, results;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                /* Validaciones de datos del Planeta */
                 if (!req.body.name)
                     throw new utils_1.Exception("Ingrese nombre ( name )");
                 if (!req.body.descripcion)
@@ -206,7 +203,7 @@ var postPlanet = function (req, res) { return __awaiter(void 0, void 0, void 0, 
     });
 }); };
 exports.postPlanet = postPlanet;
-/* Leemos todos los PLANETAS*/
+/* GET (todos) PLANETAS*/
 var getPlanets = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var planets;
     return __generator(this, function (_a) {
@@ -219,7 +216,7 @@ var getPlanets = function (req, res) { return __awaiter(void 0, void 0, void 0, 
     });
 }); };
 exports.getPlanets = getPlanets;
-/* Leemos *UNO 1*  de los PLANETAS*/
+/* GET (UNO) PLANETA*/
 var getPlanet = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var planet;
     return __generator(this, function (_a) {
@@ -235,13 +232,11 @@ exports.getPlanet = getPlanet;
 /* ************************************************************************************ */
 /* TOKEN - LOGIN  */
 /* ************************************************************************************ */
-//controlador para el logueo "/login"
 var login = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var user, token;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                /* Validamos si completo los campos correctamente */
                 if (!req.body.email)
                     throw new utils_1.Exception("Verifique el email", 400);
                 if (!req.body.password)
@@ -252,8 +247,7 @@ var login = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
                 if (!user)
                     throw new utils_1.Exception("Email o password incorrecto", 401);
                 token = jsonwebtoken_1["default"].sign({ user: user }, process.env.JWT_KEY, { expiresIn: 60 * 60 });
-                // Devolvera el usuario y el token creado recientemente al cliente
-                return [2 /*return*/, res.json({ user: user, token: token })];
+                return [2 /*return*/, res.json({ user: user, token: token })]; // Devolvera el usuario y el token creado recientemente al cliente
         }
     });
 }); };
@@ -325,6 +319,7 @@ var addPostPersonFav = function (req, res) { return __awaiter(void 0, void 0, vo
     });
 }); };
 exports.addPostPersonFav = addPostPersonFav;
+/* DELETE (:id) */
 var deletePostPlanetFav = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var favoritoPlanet, result;
     return __generator(this, function (_a) {
@@ -338,7 +333,6 @@ var deletePostPlanetFav = function (req, res) { return __awaiter(void 0, void 0,
                 })];
             case 1:
                 favoritoPlanet = _a.sent();
-                console.log(favoritoPlanet);
                 if (!!favoritoPlanet) return [3 /*break*/, 2];
                 return [2 /*return*/, res.json({ "messager": "El favorito que desea borrar no esta" })];
             case 2: return [4 /*yield*/, typeorm_1.getRepository(FavsPlanets_1.FavsPlanets)["delete"](favoritoPlanet)];
@@ -362,7 +356,6 @@ var deletePostPersonFav = function (req, res) { return __awaiter(void 0, void 0,
                 })];
             case 1:
                 favoritoPerson = _a.sent();
-                console.log(favoritoPerson);
                 if (!!favoritoPerson) return [3 /*break*/, 2];
                 return [2 /*return*/, res.json({ "messager": "El favorito que desea borrar no esta" })];
             case 2: return [4 /*yield*/, typeorm_1.getRepository(FavPerson_1.FavsPersons)["delete"](favoritoPerson)];
