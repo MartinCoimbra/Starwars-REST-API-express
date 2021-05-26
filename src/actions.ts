@@ -140,7 +140,7 @@ export const addPostPlanetFav = async (req: Request, res: Response): Promise<Res
 } 
 export const addPostPersonFav = async (req: Request, res: Response): Promise<Response> =>{
     /* Verificamos si el planeta existe */
-    const userID = (req.user as ObjectLiteral).user.id;
+    const userID = (req.user as ObjectLiteral).user;
     const person = await getRepository(PostPersons).findOne(req.params.id);
     if(!person) throw new Exception("El planeta que selecciono no existe, cambie su id")
     /* Le asignamos los valores a los FK */
@@ -152,7 +152,7 @@ export const addPostPersonFav = async (req: Request, res: Response): Promise<Res
 } 
 /* DELETE (:id) */
 export const deletePostPlanetFav = async (req: Request, res: Response): Promise<Response> =>{
-    const userID = (req.user as ObjectLiteral).user.id;
+    const userID = (req.user as ObjectLiteral).user;
     const favoritoPlanet = await getRepository(FavsPlanets).findOne(
          {
             relations: ['postplanets'],
@@ -170,7 +170,7 @@ export const deletePostPlanetFav = async (req: Request, res: Response): Promise<
         }
 } 
 export const deletePostPersonFav = async (req: Request, res: Response): Promise<Response> =>{
-    const userID = (req.user as ObjectLiteral).user.id;
+    const userID = (req.user as ObjectLiteral).user;
     const favoritoPerson = await getRepository(FavsPersons).findOne(
          {
             relations: ['postpersons'],
